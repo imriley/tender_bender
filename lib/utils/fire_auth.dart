@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FireAuth {
-  static Future<User?> registerUsingEmailPassword({
+  static Future<dynamic> registerUsingEmailPassword({
     required String name,
     required String email,
     required String password,
@@ -23,5 +25,42 @@ class FireAuth {
       print(e);
     }
     return user;
+  }
+
+  static Future<dynamic> signInUsingEmailPassword({
+    required String email,
+    required String password,
+  }) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      user = userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return "No user found for that email.";
+      } else if (e.code == 'wrong-password') {
+        return "Invalid Password";
+      }
+    }
+    return user;
+  }
+
+  static Future<dynamic> signInWithGoogle() async {
+    try {
+      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print(e);
+    }
   }
 }
