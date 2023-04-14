@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Screens/AuthenticationScreen.dart';
+import 'package:tender_bender/screens/HomeScreen.dart';
+import 'screens/AuthenticationScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: GoogleFonts.dmSans().fontFamily,
       ),
-      home: const AuthenticationScreen(),
+      home: const HomeScreen(),
     );
   }
 }
