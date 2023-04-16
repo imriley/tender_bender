@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tender_bender/model/tender.dart';
+import 'package:tender_bender/screens/TenderDetails.dart';
 import 'package:tender_bender/utils/debouncer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -206,7 +206,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(8),
                                     onTap: () {
-                                      print('Hello');
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TenderPage(tender: tender)));
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(16),

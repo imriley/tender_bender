@@ -3,8 +3,8 @@ import 'dart:core';
 class Tender {
   int tenderNo;
   String dept;
-  DateTime bidStartDate;
-  DateTime bidDueDate;
+  int bidStartDate;
+  int bidDueDate;
   String description;
   String pac;
 
@@ -20,10 +20,8 @@ class Tender {
     return Tender(
         tenderNo: parsedJson['tenderNo'],
         dept: parsedJson['dept'],
-        bidStartDate:
-            DateTime.fromMillisecondsSinceEpoch(parsedJson['bidStartDate']),
-        bidDueDate:
-            DateTime.fromMillisecondsSinceEpoch(parsedJson['bidDueDate']),
+        bidStartDate: parsedJson['bidStartDate'],
+        bidDueDate: parsedJson['bidDueDate'],
         description: parsedJson['description'],
         pac: parsedJson['pac']);
   }
