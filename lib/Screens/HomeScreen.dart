@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tender_bender/model/tender.dart';
+import 'package:tender_bender/screens/AuthenticationScreen.dart';
 import 'package:tender_bender/screens/TenderDetails.dart';
 import 'package:tender_bender/utils/debouncer.dart';
+import 'package:tender_bender/utils/fire_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Tender> tenderList = [];
   List<Tender> filteredTenderList = [];
   final _debouncer = Debouncer(milliseconds: 1000);
+  late SharedPreferences loginData;
 
   Future<void> readJson() async {
     final String jsonString =
@@ -30,10 +34,22 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void loadPreference() async {
+    loginData = await SharedPreferences.getInstance();
+  }
+
+  void signOut() {
+    loginData.setBool('login', true);
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const AuthenticationScreen()));
+    FireAuth.signOut();
+  }
+
   @override
   void initState() {
     super.initState();
     readJson();
+    loadPreference();
   }
 
   @override
@@ -54,18 +70,33 @@ class _HomeScreenState extends State<HomeScreen> {
           titleSpacing: 16,
           toolbarHeight: double.tryParse('40'),
           title: const Text(
-            "Hello Alexa",
+            "Tender Bender",
             style: TextStyle(
               color: Color(0xFF322651),
               fontSize: 20,
             ),
           ),
-          actions: const [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"),
+          actions: [
+            PopupMenuButton(
+              child: const CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://imgs.search.brave.com/Rk54JpTpWzMjBegGJAAUsMg3KwmEntNWvWMEkJ9-bzw/rs:fit:820:719:1/g:ce/aHR0cHM6Ly93d3cu/bmljZXBuZy5jb20v/cG5nL2RldGFpbC85/MzMtOTMzMjEzMV9w/cm9maWxlLXBpY3R1/cmUtZGVmYXVsdC1w/bmcucG5n"),
+              ),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    child: TextButton(
+                      onPressed: signOut,
+                      child: const Text(
+                        'Sign Out',
+                        style: TextStyle(color: Color(0xFF322651)),
+                      ),
+                    ),
+                  )
+                ];
+              },
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             )
           ],

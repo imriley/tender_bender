@@ -53,14 +53,19 @@ class FireAuth {
       GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-      final credential = GoogleAuthProvider.credential(
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      var authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return authResult.user;
     } catch (e) {
       print(e);
     }
+  }
+
+  static Future<void> signOut() {
+    return FirebaseAuth.instance.signOut();
   }
 }

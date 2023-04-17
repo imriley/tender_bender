@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tender_bender/screens/HomeScreen.dart';
 import 'package:tender_bender/utils/fire_auth.dart';
 
 class AuthenticationScreen extends StatefulWidget {
@@ -29,6 +31,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   final FocusNode _focusName = FocusNode();
   final FocusNode _focusEmail = FocusNode();
   final FocusNode _focusPassword = FocusNode();
+  late SharedPreferences loginData;
+  late bool newUser;
 
   void switchPage() {
     setState(() {
@@ -61,6 +65,21 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     } else {
       isFormInvalid = true;
     }
+  }
+
+  void check_if_already_login() async {
+    loginData = await SharedPreferences.getInstance();
+    newUser = (loginData.getBool('login') ?? true);
+    if (newUser == false) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    check_if_already_login();
   }
 
   @override
@@ -316,6 +335,11 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             fireBaseErrorMsg = data;
                             isFirebaseError = true;
                           });
+                        } else {
+                          loginData.setBool('login', !keepMeLoggedIn);
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen()));
                         }
                       }
                       setState(() {
@@ -336,7 +360,11 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   height: 36,
                   child: ElevatedButton(
                     onPressed: () async {
-                      FireAuth.signInWithGoogle();
+                      var data = await FireAuth.signInWithGoogle();
+                      print(data);
+                      loginData.setBool('login', false);
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor:
@@ -401,6 +429,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     FireAuth.signInWithGoogle();
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -704,7 +734,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             isFirebaseError = true;
                           });
                         } else {
-                          print(user);
+                          loginData.setBool('login', false);
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen()));
                           setState(() {
                             isFirebaseError = false;
                           });

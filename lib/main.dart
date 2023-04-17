@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: GoogleFonts.dmSans().fontFamily,
       ),
-      home: const HomeScreen(),
+      home: const AuthenticationScreen(),
     );
   }
 }
