@@ -78,24 +78,12 @@ class FireAuth {
     }
 
     return user;
-
-    // try {
-    //   GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    //   GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-    //   final AuthCredential credential = GoogleAuthProvider.credential(
-    //     accessToken: googleAuth?.accessToken,
-    //     idToken: googleAuth?.idToken,
-    //   );
-    //   var authResult =
-    //       await FirebaseAuth.instance.signInWithCredential(credential);
-    //   return authResult.user;
-    // } catch (e) {
-    //   print(e);
-    // }
   }
 
-  static Future<void> signOut() {
-    return FirebaseAuth.instance.signOut();
+  static Future<void> signOut() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await FirebaseAuth.instance.signOut();
+    await googleSignIn.disconnect();
+    await googleSignIn.signOut();
   }
 }

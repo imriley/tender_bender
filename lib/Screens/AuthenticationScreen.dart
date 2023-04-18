@@ -370,6 +370,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           isFirebaseError = true;
                         });
                       } else {
+                        loginData.setBool('login', false);
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => const HomeScreen()));
                       }
@@ -449,6 +450,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                         isFirebaseError = true;
                       });
                     } else {
+                      loginData.setBool('login', false);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const HomeScreen()));
                     }
@@ -489,8 +491,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       ),
                       Text(
                         "or use your email",
-                        style:
-                            TextStyle(fontSize: 16, color: Color(0xff9CA3AF)),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff9CA3AF),
+                        ),
                       ),
                       Expanded(
                         child: Divider(
@@ -508,19 +512,21 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       'Full Name',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: isInvalidName
-                              ? const Color(0xFFF43F5E)
-                              : const Color(0xFF6B7280)),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: isInvalidName
+                            ? const Color(0xFFF43F5E)
+                            : const Color(0xFF6B7280),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Container(
                       decoration: const BoxDecoration(boxShadow: [
                         BoxShadow(
-                            color: Color.fromRGBO(31, 41, 55, 0.08),
-                            blurRadius: 2,
-                            offset: Offset(0, 1))
+                          color: Color.fromRGBO(31, 41, 55, 0.08),
+                          blurRadius: 2,
+                          offset: Offset(0, 1),
+                        )
                       ]),
                       child: SizedBox(
                         height: 40,

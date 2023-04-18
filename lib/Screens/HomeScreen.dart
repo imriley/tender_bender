@@ -38,11 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
     loginData = await SharedPreferences.getInstance();
   }
 
-  void signOut() {
+  void signOut() async {
     loginData.setBool('login', true);
+    await FireAuth.signOut();
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const AuthenticationScreen()));
-    FireAuth.signOut();
   }
 
   @override
