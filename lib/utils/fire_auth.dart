@@ -49,20 +49,50 @@ class FireAuth {
   }
 
   static Future<dynamic> signInWithGoogle() async {
-    try {
-      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication? googleSignInAuthentication =
+          await googleSignInAccount.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+        accessToken: googleSignInAuthentication?.accessToken,
+        idToken: googleSignInAuthentication?.idToken,
       );
-      var authResult =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      return authResult.user;
-    } catch (e) {
-      print(e);
+
+      try {
+        final UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+        user = userCredential.user;
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'account-exists-with-different-credential') {
+          return "Account already exists with different credential.";
+        } else if (e.code == 'invalid-credential') {
+          return "Invalid credential.";
+        }
+      } catch (e) {
+        return "Error signing in with Google.";
+      }
     }
+
+    return user;
+
+    // try {
+    //   GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    //   GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    //   final AuthCredential credential = GoogleAuthProvider.credential(
+    //     accessToken: googleAuth?.accessToken,
+    //     idToken: googleAuth?.idToken,
+    //   );
+    //   var authResult =
+    //       await FirebaseAuth.instance.signInWithCredential(credential);
+    //   return authResult.user;
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   static Future<void> signOut() {

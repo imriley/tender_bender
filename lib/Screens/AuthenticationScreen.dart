@@ -360,11 +360,22 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   height: 36,
                   child: ElevatedButton(
                     onPressed: () async {
-                      var data = await FireAuth.signInWithGoogle();
-                      print(data);
-                      loginData.setBool('login', false);
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
+                      setState(() {
+                        isProcessing = true;
+                      });
+                      dynamic data = await FireAuth.signInWithGoogle();
+                      if (data.runtimeType == String || data == null) {
+                        setState(() {
+                          fireBaseErrorMsg = data;
+                          isFirebaseError = true;
+                        });
+                      } else {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => const HomeScreen()));
+                      }
+                      setState(() {
+                        isProcessing = false;
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor:
@@ -428,9 +439,22 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    FireAuth.signInWithGoogle();
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const HomeScreen()));
+                    setState(() {
+                      isProcessing = true;
+                    });
+                    dynamic data = await FireAuth.signInWithGoogle();
+                    if (data.runtimeType == String || data == null) {
+                      setState(() {
+                        fireBaseErrorMsg = data;
+                        isFirebaseError = true;
+                      });
+                    } else {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
+                    }
+                    setState(() {
+                      isProcessing = false;
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
