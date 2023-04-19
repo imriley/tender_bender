@@ -83,7 +83,6 @@ class FireAuth {
   static Future<void> signOut() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     await FirebaseAuth.instance.signOut();
-    await googleSignIn.disconnect();
     await googleSignIn.signOut();
   }
 }

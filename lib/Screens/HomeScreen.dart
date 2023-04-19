@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -77,24 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           actions: [
-            PopupMenuButton(
-              child: const CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://imgs.search.brave.com/Rk54JpTpWzMjBegGJAAUsMg3KwmEntNWvWMEkJ9-bzw/rs:fit:820:719:1/g:ce/aHR0cHM6Ly93d3cu/bmljZXBuZy5jb20v/cG5nL2RldGFpbC85/MzMtOTMzMjEzMV9w/cm9maWxlLXBpY3R1/cmUtZGVmYXVsdC1w/bmcucG5n"),
+            TextButton(
+              onPressed: signOut,
+              style: IconButton.styleFrom(padding: EdgeInsets.zero),
+              child: const Text(
+                "Sign Out",
+                style: TextStyle(color: Color(0xFFFF7853), fontSize: 16),
               ),
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                    child: TextButton(
-                      onPressed: signOut,
-                      child: const Text(
-                        'Sign Out',
-                        style: TextStyle(color: Color(0xFF322651)),
-                      ),
-                    ),
-                  )
-                ];
-              },
             ),
             const SizedBox(
               width: 16,
@@ -219,7 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Expanded(
                     child: filteredTenderList.isNotEmpty
-                        ? ListView.builder(
+                        ? CupertinoScrollbar(
+                            child: ListView.builder(
                             keyboardDismissBehavior:
                                 ScrollViewKeyboardDismissBehavior.onDrag,
                             shrinkWrap: true,
@@ -264,7 +255,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             height: 8,
                                           ),
                                           Text(
-                                            tender.description,
+                                            tender.description.length > 172
+                                                ? "${tender.description.substring(0, 172)}..."
+                                                : tender.description,
                                             style: const TextStyle(
                                               fontSize: 14,
                                               color: Color(0xFF444162),
@@ -347,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               );
                             },
-                          )
+                          ))
                         : const Center(
                             child: Text(
                               "No Data found.",
