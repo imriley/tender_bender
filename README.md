@@ -1,16 +1,22 @@
-# tender_bender
+# Tender Bender
 
-A new Flutter project.
+Tender Bender is an Android app built using Flutter that lets you check active tenders. With this app, you can easily browse through a list of active tenders and see details such as the tender description, closing date, etc.
+
+## Features
+
+- Browse through a list of active tenders.
+- View details such as the tender description, closing date, etc.
+- Search for department name or tender no.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To get started with Tender Bender, follow these steps:
 
-A few resources to get you started if this is your first Flutter project:
+1. Clone the repository: `git clone https://github.com/your-username/tender-bender.git`
+2. Setup firebase, you can use [this guide](https://firebase.google.com/docs/flutter/setup?platform=android) for reference.
+3. Install dependencies: `flutter pub get`
+4. Run the app: `flutter run`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Contributions
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Contributions to Tender Bender are welcome! If you find a bug or have a feature request, please open an issue on GitHub. If you want to contribute code, please fork the repository and submit a pull request.
